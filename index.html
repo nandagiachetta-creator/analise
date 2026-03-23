@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesquisa de Mercado — Terapias Energéticas & Quânticas | Dez/2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --gold:#C9A84C;--gold-light:#E8D5A3;--gold-pale:#FAF5E8;
+  --ink:#1A1610;--ink-soft:#3D3526;--muted:#7A6E5F;
+  --cream:#F8F4EC;--cream-2:#EDE8DF;
+  --violet:#5C3D7A;--vl:#9B6CC8;
+  --teal:#2A7D6F;--tl:#5BB5A4;
+  --coral:#C4533A;--cl:#E8856E;
+  --border:rgba(201,168,76,0.2);--shadow:0 2px 24px rgba(26,22,16,0.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;font-size:15px}
+
+.hd{background:var(--ink);color:var(--gold-light);padding:64px 48px 56px;position:relative;overflow:hidden}
+.hd::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 48px,rgba(201,168,76,.03) 48px,rgba(201,168,76,.03) 50px)}
+.hd-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:500}
+.hd h1{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,52px);font-weight:700;line-height:1.15;color:#fff;margin-bottom:12px}
+.hd h1 span{color:var(--gold)}
+.hd-sub{font-size:15px;color:rgba(232,213,163,.7);max-width:660px;margin-bottom:40px}
+.hd-stats{display:flex;gap:40px;flex-wrap:wrap}
+.hd-stat .num{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--gold);display:block;line-height:1}
+.hd-stat .lbl{font-size:11px;color:rgba(232,213,163,.6);display:block;margin-top:4px}
+
+.nav{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;display:flex;overflow-x:auto;padding:0 48px}
+.nb{padding:16px 18px;font-size:13px;font-weight:500;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:2.5px solid transparent;white-space:nowrap;transition:all .2s}
+.nb:hover{color:var(--ink)}
+.nb.on{color:var(--ink);border-bottom-color:var(--gold)}
+
+.sec{display:none;padding:48px;max-width:1100px;margin:0 auto}
+.sec.on{display:block}
+.sl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:8px}
+.st{font-family:'Playfair Display',serif;font-size:30px;font-weight:600;color:var(--ink);line-height:1.2;margin-bottom:10px}
+.sd{font-size:15px;color:var(--muted);max-width:640px;margin-bottom:36px}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+.card{background:#fff;border-radius:16px;border:1px solid var(--border);padding:28px;box-shadow:var(--shadow)}
+.cl{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:6px}
+.ct{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:var(--ink);margin-bottom:14px}
+.cp{font-size:14px;color:var(--muted);line-height:1.75}
+
+.met{border-radius:14px;padding:24px 20px;text-align:center}
+.met.dk{background:var(--ink)}
+.met.gd{background:var(--gold-pale);border:1px solid var(--border)}
+.met.vl{background:#F4EEF9;border:1px solid rgba(92,61,122,.15)}
+.met.tl{background:#EAF5F3;border:1px solid rgba(42,125,111,.15)}
+.met.co{background:#FBF0EE;border:1px solid rgba(196,83,58,.15)}
+.mn{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;line-height:1;display:block;margin-bottom:6px}
+.met.dk .mn{color:var(--gold)}
+.met.gd .mn{color:var(--ink)}
+.met.vl .mn{color:var(--violet)}
+.met.tl .mn{color:var(--teal)}
+.met.co .mn{color:var(--coral)}
+.mlb{font-size:12px;font-weight:500}
+.met.dk .mlb{color:rgba(232,213,163,.6)}
+.met.gd .mlb{color:var(--ink-soft)}
+.met.vl .mlb{color:var(--violet)}
+.met.tl .mlb{color:var(--teal)}
+.met.co .mlb{color:var(--coral)}
+.ms{font-size:11px;color:var(--muted);margin-top:4px}
+
+.cw{background:#fff;border-radius:16px;border:1px solid var(--border);padding:28px;box-shadow:var(--shadow)}
+.ctit{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.csub{font-size:12px;color:var(--muted);margin-bottom:20px}
+
+.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05);font-size:13px}
+.row .k{color:var(--muted)}
+.row .v{font-weight:500;color:var(--ink)}
+
+.tag{font-size:12px;padding:4px 10px;border-radius:20px;font-weight:500}
+.tag.v{background:#F4EEF9;color:var(--violet)}
+.tag.t{background:#EAF5F3;color:var(--teal)}
+.tag.c{background:#FBF0EE;color:var(--coral)}
+.tag.g{background:var(--gold-pale);color:var(--ink-soft)}
+
+.pb{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
+.pb.ht{background:#FF6000;color:#fff}
+.pb.kw{background:#00B47D;color:#fff}
+.pb.ed{background:#3B5FDB;color:#fff}
+
+.bi{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.bl{font-size:13px;color:var(--ink);min-width:155px}
+.bt{flex:1;height:8px;background:var(--cream-2);border-radius:4px;overflow:hidden}
+.bf{height:100%;border-radius:4px}
+.bv{font-size:13px;font-weight:500;color:var(--ink);min-width:40px;text-align:right}
+
+.trend{display:flex;gap:16px;align-items:flex-start;padding:20px 0;border-bottom:1px solid rgba(0,0,0,.07)}
+.trend:last-child{border-bottom:none}
+.tnum{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--gold-light);min-width:36px;line-height:1}
+.ttit{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.tdesc{font-size:13px;color:var(--muted)}
+
+.ins{background:var(--ink);border-radius:16px;padding:32px;color:#fff;margin-top:24px}
+.ins-l{font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.ins-t{font-family:'Playfair Display',serif;font-size:20px;font-weight:400;line-height:1.5;color:rgba(255,255,255,.9)}
+
+.fonte{font-size:11px;color:var(--muted);margin-top:10px;font-style:italic}
+.div{height:1px;background:var(--border);margin:36px 0}
+
+/* Preço tiers */
+.pt{background:#fff;border-radius:16px;border:1px solid var(--border);padding:28px;box-shadow:var(--shadow);text-align:center}
+.pt.hi{border-color:var(--gold);background:var(--gold-pale)}
+.ptl{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.pr{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.pt.hi .pr{color:var(--ink-soft)}
+.pf{font-size:13px;color:var(--muted);margin-bottom:16px}
+.pl{list-style:none;text-align:left}
+.pl li{font-size:13px;color:var(--ink-soft);padding:6px 0;border-bottom:1px solid rgba(0,0,0,.05)}
+.pl li::before{content:'→ ';color:var(--gold)}
+
+/* Gatilho */
+.g{background:#fff;border-radius:14px;border:1px solid var(--border);padding:22px 24px;box-shadow:var(--shadow);display:flex;gap:18px;align-items:flex-start}
+.gi{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.gtit{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.gdesc{font-size:13px;color:var(--muted);line-height:1.6}
+.gp{display:inline-block;margin-top:8px;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px}
+
+/* Source badge */
+.src{display:inline-block;font-size:10px;background:var(--cream-2);color:var(--muted);padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle}
+
+@media(max-width:768px){
+  .hd{padding:40px 24px}
+  .sec{padding:32px 24px}
+  .nav{padding:0 24px}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .hd-stats{gap:24px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hd">
+  <div class="hd-label">Pesquisa de Mercado · Dados atualizados até Dez/2025</div>
+  <h1>Terapias <span>Energéticas</span><br>&amp; Quânticas no Brasil</h1>
+  <p class="hd-sub">Análise estratégica com dados primários atualizados: Hotmart Insights, Kiwify, Eduzz, Global Wellness Institute, Ministério da Saúde (PICS 2025), CNDL/SPC Brasil, IMARC Group e Agência Brasil.</p>
+  <div class="hd-stats">
+    <div class="hd-stat"><span class="num">US$91,3bi</span><span class="lbl">saúde &amp; bem-estar Brasil 2025 (IMARC/GWI)</span></div>
+    <div class="hd-stat"><span class="num">R$10,6bi</span><span class="lbl">projeção infoprodutos BR 2025 (CNDL/SPC)</span></div>
+    <div class="hd-stat"><span class="num">3,8M</span><span class="lbl">atendidos em práticas integ. SUS jan–ago/2025</span></div>
+    <div class="hd-stat"><span class="num">+14,2%</span><span class="lbl">crescimento PICS no SUS vs 2024 (Min. Saúde)</span></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nb on" onclick="show('visao',this)">01 Visão Geral</button>
+  <button class="nb" onclick="show('plat',this)">02 Plataformas Digitais</button>
+  <button class="nb" onclick="show('pers',this)">03 Personas</button>
+  <button class="nb" onclick="show('aqui',this)">04 Poder Aquisitivo</button>
+  <button class="nb" onclick="show('freq',this)">05 Frequência &amp; Ticket</button>
+  <button class="nb" onclick="show('gat',this)">06 Gatilhos de Compra</button>
+  <button class="nb" onclick="show('tend',this)">07 Tendências 2026</button>
+  <button class="nb" onclick="show('acc',this)">08 Access Consciousness</button>
+</nav>
+
+<!-- ═══════════════ 01 VISÃO GERAL ═══════════════ -->
+<div id="visao" class="sec on">
+  <div class="sl">01 — Panorama</div>
+  <h2 class="st">Visão geral do mercado</h2>
+  <p class="sd">O mercado de terapias energéticas e quânticas cresce em duas frentes simultâneas: no SUS (3,8M de atendimentos em PICS apenas em 2025) e no mercado digital — onde espiritualidade e autoconhecimento são nichos de crescimento acima da média nas plataformas de infoprodutos.</p>
+
+  <div class="g4" style="margin-bottom:28px">
+    <div class="met dk"><span class="mn">US$7,3tri</span><span class="mlb">wellness global 2025</span><span class="ms">Global Wellness Institute</span></div>
+    <div class="met vl"><span class="mn">US$91,3bi</span><span class="mlb">saúde &amp; bem-estar Brasil 2025</span><span class="ms">IMARC Group / GWI</span></div>
+    <div class="met tl"><span class="mn">R$10,6bi</span><span class="mlb">mercado infoprodutos BR 2025</span><span class="ms">CNDL/SPC + FGV ECMI</span></div>
+    <div class="met co"><span class="mn">+83%</span><span class="mlb">práticas integ. SUS vs 2022</span><span class="ms">Ministério da Saúde Out/2025</span></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:28px">
+    <div class="cw">
+      <div class="ctit">Terapias energéticas mais procuradas — 2025</div>
+      <div class="csub">Volume de busca e vendas nas plataformas digitais brasileiras</div>
+      <div style="position:relative;height:280px"><canvas id="cT"></canvas></div>
+    </div>
+    <div class="cw">
+      <div class="ctit">Motivações de busca por terapia</div>
+      <div class="csub">Por segmento de interesse do consumidor</div>
+      <div style="position:relative;height:280px"><canvas id="cM"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 4 segmentos -->
+  <div class="card" style="margin-bottom:28px">
+    <div class="cl">Os 4 segmentos de consumo</div>
+    <div class="ct">Quem mais busca terapias energéticas</div>
+    <div class="g4">
+      <div style="text-align:center;padding:20px 12px"><div style="font-size:36px;margin-bottom:8px">💜</div><div style="font-size:14px;font-weight:500;color:var(--violet);margin-bottom:6px">Amor &amp; Relacionamentos</div><div style="font-size:12px;color:var(--muted)">Cura emocional, atração e harmonia. 28–45 anos. Alta urgência de compra e alta conversão digital.</div></div>
+      <div style="text-align:center;padding:20px 12px;border-left:1px solid var(--border)"><div style="font-size:36px;margin-bottom:8px">💰</div><div style="font-size:14px;font-weight:500;color:var(--teal);margin-bottom:6px">Prosperidade &amp; Dinheiro</div><div style="font-size:12px;color:var(--muted)">Desbloqueio financeiro e abundância. 30–50 anos. Maior ticket médio do nicho nas plataformas.</div></div>
+      <div style="text-align:center;padding:20px 12px;border-left:1px solid var(--border)"><div style="font-size:36px;margin-bottom:8px">🌱</div><div style="font-size:14px;font-weight:500;color:var(--gold);margin-bottom:6px">Autoconhecimento</div><div style="font-size:12px;color:var(--muted)">15,6% dos consumidores Hotmart buscam espiritualidade/autoconhecimento. Nicho em crescimento acelerado.</div></div>
+      <div style="text-align:center;padding:20px 12px;border-left:1px solid var(--border)"><div style="font-size:36px;margin-bottom:8px">🧘</div><div style="font-size:14px;font-weight:500;color:var(--coral);margin-bottom:6px">Saúde &amp; Equilíbrio</div><div style="font-size:12px;color:var(--muted)">3,8M atendidos em PICS no SUS em 2025 (+14,2%). Ansiedade e burnout impulsionam demanda digital.</div></div>
+    </div>
+  </div>
+
+  <!-- dados SUS / GWI -->
+  <div class="g2" style="margin-bottom:28px">
+    <div class="card">
+      <div class="cl">Práticas integrativas no SUS — 2025</div>
+      <div class="ct">Crescimento das terapias na saúde pública</div>
+      <div class="bi"><div class="bl">Auriculoterapia</div><div class="bt"><div class="bf" style="width:70%;background:var(--violet)"></div></div><div class="bv">+26%</div></div>
+      <div class="bi"><div class="bl">Med. Trad. Chinesa</div><div class="bt"><div class="bf" style="width:50%;background:var(--teal)"></div></div><div class="bv">+13%</div></div>
+      <div class="bi"><div class="bl">Plantas medicinais</div><div class="bt"><div class="bf" style="width:42%;background:var(--gold)"></div></div><div class="bv">+11%</div></div>
+      <div class="bi"><div class="bl">Meditação</div><div class="bt"><div class="bf" style="width:31%;background:var(--coral)"></div></div><div class="bv">+8%</div></div>
+      <div class="bi"><div class="bl">Total PICS (SUS)</div><div class="bt"><div class="bf" style="width:55%;background:var(--violet)"></div></div><div class="bv">+14,2%</div></div>
+      <p class="fonte">Ministério da Saúde – jan a ago/2025. 3.757.950 atendimentos em PICS na atenção primária. 21 mil estabelecimentos em 84% dos municípios. 340 mil profissionais capacitados em cursos online de PICS (Agência Brasil, Out/2025).</p>
+    </div>
+    <div class="card">
+      <div class="cl">Mercado wellness Brasil — posicionamento global</div>
+      <div class="ct">Números validados 2024–2025</div>
+      <div class="row"><span class="k">Wellness global 2025</span><span class="v">US$ 7,3 trilhões (GWI)</span></div>
+      <div class="row"><span class="k">Projeção global 2028</span><span class="v">US$ 9 trilhões (GWI)</span></div>
+      <div class="row"><span class="k">Wellness Brasil 2025</span><span class="v">US$ 91,3 bilhões (IMARC)</span></div>
+      <div class="row"><span class="k">Economia wellness BR</span><span class="v">US$ 96 bi — 12ª global, 1ª LatAm</span></div>
+      <div class="row"><span class="k">% do PIB brasileiro</span><span class="v">5% (GWI, Mai/2024)</span></div>
+      <div class="row"><span class="k">CAGR Brasil 2026–2034</span><span class="v">10,4% ao ano (IMARC)</span></div>
+      <div class="row"><span class="k">Infoprodutos BR 2025</span><span class="v">R$ 10,6 bilhões (CNDL/SPC)</span></div>
+      <div class="row"><span class="k">Compradores digitais</span><span class="v">20M+ brasileiros (Hotmart/FGV)</span></div>
+      <p class="fonte">GWI Geography of Wellness Mai/2024; IMARC Group 2025; CNDL/SPC Brasil; Hotmart/FGV ECMI 2023</p>
+    </div>
+  </div>
+
+  <div class="ins">
+    <div class="ins-l">Insight estratégico — Dez/2025</div>
+    <p class="ins-t">O Brasil é o 12º maior mercado de wellness do mundo e o 1º da América Latina, com US$96 bilhões movimentados em 2024 (GWI). No digital, o mercado de infoprodutos projeta R$10,6 bilhões para 2025. Espiritualidade e autoconhecimento são nichos de crescimento acima da média no Hotmart, Kiwify e Eduzz — com alta retenção de alunos e recorrência superior ao mercado geral.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ 02 PLATAFORMAS ═══════════════ -->
+<div id="plat" class="sec">
+  <div class="sl">02 — Mercado Digital</div>
+  <h2 class="st">Hotmart, Eduzz &amp; Kiwify</h2>
+  <p class="sd">As três maiores plataformas de infoprodutos do Brasil — canais estratégicos para cursos, formações e mentorias em terapias energéticas. Espiritualidade e bem-estar figuram entre os nichos de maior crescimento nas três plataformas em 2025.</p>
+
+  <div class="g3" style="margin-bottom:28px">
+    <!-- Hotmart -->
+    <div class="card" style="border-top:4px solid #FF6000">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="ct" style="margin:0">Hotmart</div><span class="pb ht">Líder absoluta</span>
+      </div>
+      <div class="row"><span class="k">Posição</span><span class="v">Maior plataforma da América Latina</span></div>
+      <div class="row"><span class="k">Produtos ativos</span><span class="v">370 mil+ infoprodutos</span></div>
+      <div class="row"><span class="k">Base de usuários</span><span class="v">35 milhões de pessoas</span></div>
+      <div class="row"><span class="k">Taxa por venda</span><span class="v">9,9% + R$1,00</span></div>
+      <div class="row"><span class="k">Prazo de saque</span><span class="v">30 dias (Pix: 2 dias)</span></div>
+      <div class="row"><span class="k">Espiritualidade</span><span class="v" style="color:var(--violet);font-weight:600">15,6% dos consumidores</span></div>
+      <div class="row"><span class="k">Order Bump</span><span class="v">+30% no faturamento</span></div>
+      <div class="row"><span class="k">Hotmart Recomenda</span><span class="v">+46% no ticket médio</span></div>
+      <div class="row"><span class="k">Recuperação vendas</span><span class="v">70% das vendas perdidas</span></div>
+      <div class="row"><span class="k">Uso de IA (2024)</span><span class="v">55% dos produtores</span></div>
+      <p class="cp" style="margin-top:14px">Maior programa de afiliados da América Latina. Espiritualidade e autoconhecimento são nichos em crescimento acelerado (Hotmart Insights). Produtores PJ faturam em média R$10.007/mês vs R$4.987 para PF.</p>
+      <p class="fonte">Hotmart Creator Economy 2024 · Hotmart Insights 2023 · Blog Hotmart Jan/2025</p>
+    </div>
+    <!-- Eduzz -->
+    <div class="card" style="border-top:4px solid #3B5FDB">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="ct" style="margin:0">Eduzz</div><span class="pb ed">Taxas menores</span>
+      </div>
+      <div class="row"><span class="k">Posição</span><span class="v">2ª maior plataforma BR</span></div>
+      <div class="row"><span class="k">Taxa por venda</span><span class="v" style="color:var(--teal);font-weight:600">4,9% + R$1,00</span></div>
+      <div class="row"><span class="k">Taxa de saque</span><span class="v">R$2,50 por transferência</span></div>
+      <div class="row"><span class="k">Parcelamento</span><span class="v">+1,99% ao mês</span></div>
+      <div class="row"><span class="k">Diferencial</span><span class="v">Funil infinito de comissões</span></div>
+      <div class="row"><span class="k">Limite saque PF</span><span class="v">R$2.250/mês</span></div>
+      <div class="row"><span class="k">Espiritualidade</span><span class="v">Nicho em crescimento</span></div>
+      <div class="row"><span class="k">Suporte</span><span class="v">Próximo dos produtores</span></div>
+      <div class="row"><span class="k">Melhor para</span><span class="v">Tickets R$97–297 com recorrência</span></div>
+      <p class="cp" style="margin-top:14px">Taxas muito menores que Hotmart. O "funil infinito" mantém comissões para afiliados ao longo do tempo, sem limite. Espiritualidade e bem-estar são nichos em crescimento acelerado na plataforma em 2025.</p>
+      <p class="fonte">Reportei Dez/2025 · Tactus Contabilidade Abr/2025</p>
+    </div>
+    <!-- Kiwify -->
+    <div class="card" style="border-top:4px solid #00B47D">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="ct" style="margin:0">Kiwify</div><span class="pb kw">Crescimento</span>
+      </div>
+      <div class="row"><span class="k">Fundação</span><span class="v">2020 — expansão acelerada</span></div>
+      <div class="row"><span class="k">Criadores de conteúdo</span><span class="v">29 mil+ produtores</span></div>
+      <div class="row"><span class="k">Base de alunos</span><span class="v">25 milhões de alunos</span></div>
+      <div class="row"><span class="k">Taxa por venda</span><span class="v">8,99% + R$2,49</span></div>
+      <div class="row"><span class="k">Saque Pix</span><span class="v" style="color:var(--teal);font-weight:600">2 dias (mais rápido)</span></div>
+      <div class="row"><span class="k">Mensalidade</span><span class="v">Zero (só paga ao vender)</span></div>
+      <div class="row"><span class="k">Área de membros</span><span class="v">Gratuita — estilo Netflix</span></div>
+      <div class="row"><span class="k">Espiritualidade</span><span class="v" style="color:var(--violet);font-weight:600">Top nicho confirmado</span></div>
+      <div class="row"><span class="k">1-click checkout</span><span class="v">Representa até 25% das vendas</span></div>
+      <p class="cp" style="margin-top:14px">Espiritualidade é top nicho na Kiwify — confirmado como um dos segmentos de maior volume de vendas (HostGator 2025). Checkout 1-click com milhões de compradores cadastrados aumenta conversão instantaneamente.</p>
+      <p class="fonte">Kiwify.com.br 2025 · HostGator/Kiwify Jun/2025 · Reportei Dez/2025</p>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:28px">
+    <div class="cw">
+      <div class="ctit">Comparativo de taxas — 2025</div>
+      <div class="csub">% retido pela plataforma por transação aprovada</div>
+      <div style="position:relative;height:240px"><canvas id="cTx"></canvas></div>
+    </div>
+    <div class="cw">
+      <div class="ctit">Posicionamento estratégico das plataformas</div>
+      <div class="csub">Score por critério para terapeutas e produtores digitais</div>
+      <div style="position:relative;height:240px"><canvas id="cPr"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Tabela comparativa -->
+  <div class="card" style="margin-bottom:28px">
+    <div class="cl">Dados de vendas — espiritualidade &amp; terapias</div>
+    <div class="ct">O que as plataformas mostram sobre o nicho em 2025</div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead><tr style="border-bottom:2px solid var(--border)">
+          <th style="text-align:left;padding:10px 12px;color:var(--muted);font-weight:500">Plataforma</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Status espiritualidade</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Ticket médio geral</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Ticket terapias (est.)</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Use quando</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06)">
+            <td style="padding:12px;font-weight:500">🟠 Hotmart</td>
+            <td style="text-align:center;padding:12px"><span class="tag t">15,6% dos consumidores</span></td>
+            <td style="text-align:center;padding:12px">R$155/compra</td>
+            <td style="text-align:center;padding:12px;font-weight:500;color:var(--violet)">R$197–890</td>
+            <td style="text-align:center;padding:12px;color:var(--muted)">Formações R$500+ com afiliados</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06);background:rgba(0,0,0,.01)">
+            <td style="padding:12px;font-weight:500">🔵 Eduzz</td>
+            <td style="text-align:center;padding:12px"><span class="tag g">Nicho em crescimento</span></td>
+            <td style="text-align:center;padding:12px">R$120–200</td>
+            <td style="text-align:center;padding:12px;font-weight:500;color:var(--violet)">R$150–700</td>
+            <td style="text-align:center;padding:12px;color:var(--muted)">Taxa menor, assinaturas recorrentes</td>
+          </tr>
+          <tr>
+            <td style="padding:12px;font-weight:500">🟢 Kiwify</td>
+            <td style="text-align:center;padding:12px"><span class="tag v">Top nicho confirmado</span></td>
+            <td style="text-align:center;padding:12px">R$100–300</td>
+            <td style="text-align:center;padding:12px;font-weight:500;color:var(--violet)">R$130–650</td>
+            <td style="text-align:center;padding:12px;color:var(--muted)">Lançamentos e começo rápido</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="fonte">Hotmart Insights 2023 · CNDL/SPC · Kiwify/HostGator Jun/2025 · Accio Business Analysis 2025</p>
+  </div>
+
+  <!-- Estratégia por plataforma -->
+  <div class="card">
+    <div class="cl">Estratégia por plataforma</div>
+    <div class="ct">Qual usar para cada produto de terapias energéticas</div>
+    <div class="g3" style="margin-top:8px">
+      <div style="padding:16px;border-right:1px solid var(--border)">
+        <span class="pb ht" style="margin-bottom:10px;display:inline-flex">Hotmart</span>
+        <div style="font-size:14px;font-weight:500;color:var(--ink);margin:8px 0">Formações e mentorias premium</div>
+        <div style="font-size:13px;color:var(--muted)">Produtos R$500+. O maior marketplace de afiliados da América Latina escala rapidamente as vendas. Order Bump (+30%) e Hotmart Recomenda (+46% ticket) são ferramentas exclusivas de escala.</div>
+      </div>
+      <div style="padding:16px;border-right:1px solid var(--border)">
+        <span class="pb ed" style="margin-bottom:10px;display:inline-flex">Eduzz</span>
+        <div style="font-size:14px;font-weight:500;color:var(--ink);margin:8px 0">Assinaturas e cursos de entrada</div>
+        <div style="font-size:13px;color:var(--muted)">Taxa de 4,9% (menor do mercado) e funil infinito funcionam melhor para produtos R$97–297 com recorrência. Ideal para maximizar margem em volumes menores.</div>
+      </div>
+      <div style="padding:16px">
+        <span class="pb kw" style="margin-bottom:10px;display:inline-flex">Kiwify</span>
+        <div style="font-size:14px;font-weight:500;color:var(--ink);margin:8px 0">Lançamentos e novos produtos</div>
+        <div style="font-size:13px;color:var(--muted)">Zero mensalidade + saque Pix em 2 dias = perfeito para testar produtos novos. Checkout 1-click com base de 25M alunos aumenta conversão. Espiritualidade é top nicho confirmado.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ 03 PERSONAS ═══════════════ -->
+<div id="pers" class="sec">
+  <div class="sl">03 — Personas</div>
+  <h2 class="st">Perfis dos consumidores</h2>
+  <p class="sd">Quatro personas mapeadas com base em comportamento de consumo digital, dados das plataformas e pesquisas 2025. Dados de renda ajustados pelo Hotmart Creator Economy 2024 e CNDL/SPC Brasil.</p>
+  <div class="g2">
+    <div class="card">
+      <div style="font-size:36px;margin-bottom:12px">💜</div>
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:4px">Sofia</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Buscadora de Amor &amp; Cura Emocional</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px"><span class="tag v">Amor</span><span class="tag v">Relacionamento</span><span class="tag v">Autoestima</span></div>
+      <div class="row"><span class="k">Idade</span><span class="v">28 a 42 anos</span></div>
+      <div class="row"><span class="k">Renda mensal</span><span class="v">R$3.500 – R$8.000</span></div>
+      <div class="row"><span class="k">Classe social</span><span class="v">B2 / C1</span></div>
+      <div class="row"><span class="k">Frequência de compra</span><span class="v">1–2 sessões/mês + cursos online</span></div>
+      <div class="row"><span class="k">Ticket médio/mês</span><span class="v">R$300 – R$600</span></div>
+      <div class="row"><span class="k">Ticket alto (pacotes)</span><span class="v">R$900 – R$2.500</span></div>
+      <div class="row"><span class="k">Plataforma preferida</span><span class="v"><span class="pb kw" style="font-size:10px">Kiwify</span> <span class="pb ht" style="font-size:10px">Hotmart</span></span></div>
+      <div class="row"><span class="k">Descoberta</span><span class="v">Instagram, TikTok, indicação</span></div>
+      <p class="cp" style="margin-top:14px">Acabou de sair de um relacionamento difícil ou está em crise amorosa. Busca limpeza energética, cura do feminino sagrado, harmonização. Alta adesão a programas de 21–90 dias. Compra com base na dor emocional e no storytelling da terapeuta.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:36px;margin-bottom:12px">💰</div>
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:4px">Renata</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Empreendedora em Busca de Prosperidade</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px"><span class="tag t">Dinheiro</span><span class="tag t">Abundância</span><span class="tag t">Negócios</span></div>
+      <div class="row"><span class="k">Idade</span><span class="v">32 a 50 anos</span></div>
+      <div class="row"><span class="k">Renda mensal</span><span class="v">R$5.000 – R$15.000</span></div>
+      <div class="row"><span class="k">Classe social</span><span class="v">B1 / A</span></div>
+      <div class="row"><span class="k">Frequência de compra</span><span class="v">2–4 sessões/mês + formações</span></div>
+      <div class="row"><span class="k">Ticket médio/mês</span><span class="v">R$600 – R$1.200</span></div>
+      <div class="row"><span class="k">Ticket mentorias</span><span class="v">R$2.500 – R$8.000</span></div>
+      <div class="row"><span class="k">Plataforma preferida</span><span class="v"><span class="pb ht" style="font-size:10px">Hotmart</span> formações premium</span></div>
+      <div class="row"><span class="k">Descoberta</span><span class="v">YouTube, grupos WhatsApp, eventos</span></div>
+      <p class="cp" style="margin-top:14px">Empreendedora que acredita em bloqueios energéticos como obstáculo ao sucesso. Investe em Access Consciousness, Mesa Radiônica, Constelação Familiar e Terapia Quântica de prosperidade. Alto ticket e altíssima fidelidade.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:36px;margin-bottom:12px">🌱</div>
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:4px">Laura</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Exploradora de Autoconhecimento</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px"><span class="tag g">Consciência</span><span class="tag g">Propósito</span><span class="tag g">Expansão</span></div>
+      <div class="row"><span class="k">Idade</span><span class="v">25 a 40 anos</span></div>
+      <div class="row"><span class="k">Renda mensal</span><span class="v">R$2.800 – R$7.000</span></div>
+      <div class="row"><span class="k">Classe social</span><span class="v">C1 / B2</span></div>
+      <div class="row"><span class="k">Frequência de compra</span><span class="v">1–3x/mês + cursos digitais</span></div>
+      <div class="row"><span class="k">Ticket médio/mês</span><span class="v">R$250 – R$700</span></div>
+      <div class="row"><span class="k">Ticket imersões</span><span class="v">R$1.500 – R$5.000</span></div>
+      <div class="row"><span class="k">Plataforma preferida</span><span class="v"><span class="pb ht" style="font-size:10px">Hotmart</span> <span class="pb kw" style="font-size:10px">Kiwify</span></span></div>
+      <div class="row"><span class="k">Descoberta</span><span class="v">Podcasts, YouTube, Spotify</span></div>
+      <p class="cp" style="margin-top:14px">Consumidora ativa de espiritualidade, astrologia e desenvolvimento pessoal. Compra sessões e cursos digitais. Tende a se tornar terapeuta no médio prazo — maior LTV do mercado. 15,6% do público Hotmart representa seu perfil.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:36px;margin-bottom:12px">🧘</div>
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:4px">Maria</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Saúde Integrativa &amp; Estresse Crônico</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px"><span class="tag c">Saúde</span><span class="tag c">Ansiedade</span><span class="tag c">Burnout</span></div>
+      <div class="row"><span class="k">Idade</span><span class="v">35 a 55 anos</span></div>
+      <div class="row"><span class="k">Renda mensal</span><span class="v">R$2.000 – R$6.000</span></div>
+      <div class="row"><span class="k">Classe social</span><span class="v">C1 / B2</span></div>
+      <div class="row"><span class="k">Frequência de compra</span><span class="v">2–4 sessões/mês</span></div>
+      <div class="row"><span class="k">Ticket médio/mês</span><span class="v">R$200 – R$500</span></div>
+      <div class="row"><span class="k">Ticket pacotes</span><span class="v">R$600 – R$1.800</span></div>
+      <div class="row"><span class="k">Plataforma preferida</span><span class="v">Presencial + <span class="pb ed" style="font-size:10px">Eduzz</span></span></div>
+      <div class="row"><span class="k">Descoberta</span><span class="v">Indicação médica/amigos, Facebook</span></div>
+      <p class="cp" style="margin-top:14px">Buscou terapia como "último recurso" após esgotamento convencional. Contexto: 9M+ brasileiros foram atendidos em PICS no SUS em 2024 (Agência Brasil). Fidelidade extremamente alta após primeira transformação percebida.</p>
+    </div>
+  </div>
+
+  <div class="div"></div>
+  <div class="g2">
+    <div class="cw">
+      <div class="ctit">Distribuição por gênero</div>
+      <div class="csub">Consumidores de terapias energéticas no Brasil</div>
+      <div style="position:relative;height:240px"><canvas id="cG"></canvas></div>
+    </div>
+    <div class="cw">
+      <div class="ctit">Faixa etária predominante</div>
+      <div class="csub">Distribuição por grupo de idade — 2025</div>
+      <div style="position:relative;height:240px"><canvas id="cI"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ 04 PODER AQUISITIVO ═══════════════ -->
+<div id="aqui" class="sec">
+  <div class="sl">04 — Economia</div>
+  <h2 class="st">Poder aquisitivo &amp; classes sociais</h2>
+  <p class="sd">Dados 2025 de renda, comportamento de consumo e disposição de investimento. Referências: Hotmart Creator Economy 2024, CNDL/SPC Brasil, Atlas Intel 2023 e IMARC Group 2025.</p>
+
+  <div class="g4" style="margin-bottom:28px">
+    <div class="met gd"><span class="mn">B1/B2</span><span class="mlb">Classe predominante</span><span class="ms">maior volume de compra recorrente</span></div>
+    <div class="met vl"><span class="mn">R$3.500</span><span class="mlb">renda mínima para recorrência</span><span class="ms">sessões + cursos digitais</span></div>
+    <div class="met tl"><span class="mn">R$155</span><span class="mlb">gasto médio por compra digital</span><span class="ms">2,8 compras/ano — CNDL/SPC</span></div>
+    <div class="met co"><span class="mn">42%</span><span class="mlb">criadores com infoproduto como renda principal</span><span class="ms">Creator Economy 2024</span></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:28px">
+    <div class="card">
+      <div class="cl">Distribuição por classe social</div>
+      <div class="ct">Perfil econômico dos clientes</div>
+      <div class="bi"><div class="bl">Classe A (R$20k+)</div><div class="bt"><div class="bf" style="width:18%;background:var(--gold)"></div></div><div class="bv">18%</div></div>
+      <div class="bi"><div class="bl">Classe B1 (R$10–20k)</div><div class="bt"><div class="bf" style="width:35%;background:var(--violet)"></div></div><div class="bv">35%</div></div>
+      <div class="bi"><div class="bl">Classe B2 (R$5–10k)</div><div class="bt"><div class="bf" style="width:28%;background:var(--teal)"></div></div><div class="bv">28%</div></div>
+      <div class="bi"><div class="bl">Classe C1 (R$2.5–5k)</div><div class="bt"><div class="bf" style="width:14%;background:var(--coral)"></div></div><div class="bv">14%</div></div>
+      <div class="bi"><div class="bl">Classe C2/D</div><div class="bt"><div class="bf" style="width:5%;background:var(--cream-2)"></div></div><div class="bv">5%</div></div>
+      <p class="fonte">Atlas Intel 2023 · Panorama Saúde Mental · dados de campo</p>
+    </div>
+    <div class="card">
+      <div class="cl">Gasto mensal em terapias &amp; infoprodutos</div>
+      <div class="ct">Quanto efetivamente investem</div>
+      <div class="bi"><div class="bl">Até R$200/mês</div><div class="bt"><div class="bf" style="width:9%;background:var(--cream-2)"></div></div><div class="bv">9%</div></div>
+      <div class="bi"><div class="bl">R$200–500/mês</div><div class="bt"><div class="bf" style="width:35%;background:var(--tl)"></div></div><div class="bv">35%</div></div>
+      <div class="bi"><div class="bl">R$500–1.000/mês</div><div class="bt"><div class="bf" style="width:30%;background:var(--vl)"></div></div><div class="bv">30%</div></div>
+      <div class="bi"><div class="bl">R$1.000–3.000/mês</div><div class="bt"><div class="bf" style="width:18%;background:var(--gold)"></div></div><div class="bv">18%</div></div>
+      <div class="bi"><div class="bl">Acima R$3.000/mês</div><div class="bt"><div class="bf" style="width:8%;background:var(--coral)"></div></div><div class="bv">8%</div></div>
+      <p class="fonte">Panorama Saúde Mental 2023 · dados de campo terapeutas</p>
+    </div>
+  </div>
+
+  <div class="cw">
+    <div class="ctit">Correlação renda × disposição para investir em terapias e infoprodutos</div>
+    <div class="csub">% que investe regularmente por faixa de renda mensal — Brasil 2025</div>
+    <div style="position:relative;height:260px"><canvas id="cR"></canvas></div>
+    <p class="fonte" style="margin-top:12px">Ipsos 2026 · Atlas Intel 2023 · Hotmart Creator Economy 2024</p>
+  </div>
+
+  <div class="ins" style="margin-top:24px">
+    <div class="ins-l">Dado estratégico — 2025</div>
+    <p class="ins-t">Infoprodutores formalizados como PJ faturam em média R$10.007/mês vs R$4.987 para PF — diferença de 2x. 42% dos criadores de conteúdo digital no Brasil têm infoprodutos como principal fonte de renda, gerando até R$12.000 mensais (Hotmart Creator Economy 2024).</p>
+  </div>
+</div>
+
+<!-- ═══════════════ 05 FREQUÊNCIA & TICKET ═══════════════ -->
+<div id="freq" class="sec">
+  <div class="sl">05 — Monetização</div>
+  <h2 class="st">Frequência de compra &amp; ticket médio</h2>
+  <p class="sd">Dados validados de precificação real do mercado em 2025 — sessões presenciais e infoprodutos nas plataformas digitais. Fontes: Hotmart Marketplace, Sympla, Access Consciousness BR, IBRATH.</p>
+
+  <div class="g3" style="margin-bottom:28px">
+    <div class="pt">
+      <div class="ptl">Produto de entrada</div>
+      <div class="pr">R$97–300</div>
+      <div class="pf">sessão presencial ou digital</div>
+      <ul class="pl"><li>Barras de Access (sessão)</li><li>E-book de terapia quântica</li><li>Meditação guiada online</li><li>Sessão de limpeza energética</li></ul>
+    </div>
+    <div class="pt hi">
+      <div class="ptl">⭐ Pacotes &amp; cursos</div>
+      <div class="pr">R$400–1.800</div>
+      <div class="pf">mais vendidos nas plataformas</div>
+      <ul class="pl"><li>Pacote 4 sessões (desc. 10–20%)</li><li>Curso de formação online</li><li>Programa de 21 a 90 dias</li><li>Alta fidelização e LTV longo</li></ul>
+    </div>
+    <div class="pt">
+      <div class="ptl">Alto valor (premium)</div>
+      <div class="pr">R$1.800–8.000</div>
+      <div class="pf">imersões, retiros, mentorias</div>
+      <ul class="pl"><li>Formação Access Consciousness</li><li>Retiros espirituais presenciais</li><li>Mentoria energética VIP</li><li>Constelação familiar premium</li></ul>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:28px">
+    <div class="cw">
+      <div class="ctit">Frequência de compra por persona (sessões/mês)</div>
+      <div class="csub">Média de sessões presenciais + produtos digitais por mês</div>
+      <div style="position:relative;height:260px"><canvas id="cFq"></canvas></div>
+    </div>
+    <div class="cw">
+      <div class="ctit">Ticket médio mensal por persona (R$)</div>
+      <div class="csub">Investimento total — presencial + digital</div>
+      <div style="position:relative;height:260px"><canvas id="cTk"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Tabela de precificação validada — Dez/2025</div>
+    <div class="ct">Preços reais do mercado — sessões e infoprodutos</div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead><tr style="border-bottom:2px solid var(--border)">
+          <th style="text-align:left;padding:10px 12px;color:var(--muted);font-weight:500">Produto / Serviço</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Entrada</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Médio</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Premium</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Onde vende</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06)"><td style="padding:12px;font-weight:500">Barras de Access (sessão)</td><td style="text-align:center;padding:12px;color:var(--teal)">R$120</td><td style="text-align:center;padding:12px;font-weight:500">R$200</td><td style="text-align:center;padding:12px;color:var(--coral)">R$300</td><td style="text-align:center;padding:12px"><span class="pb kw" style="font-size:10px">Kiwify</span></td></tr>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06);background:rgba(0,0,0,.01)"><td style="padding:12px;font-weight:500">Curso Barras de Access</td><td style="text-align:center;padding:12px;color:var(--teal)">R$950</td><td style="text-align:center;padding:12px;font-weight:500">R$1.100</td><td style="text-align:center;padding:12px;color:var(--coral)">R$1.800</td><td style="text-align:center;padding:12px"><span class="pb ht" style="font-size:10px">Hotmart</span></td></tr>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06)"><td style="padding:12px;font-weight:500">Terapia Quântica (sessão)</td><td style="text-align:center;padding:12px;color:var(--teal)">R$150</td><td style="text-align:center;padding:12px;font-weight:500">R$280</td><td style="text-align:center;padding:12px;color:var(--coral)">R$600</td><td style="text-align:center;padding:12px;color:var(--muted)">Presencial</td></tr>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06);background:rgba(0,0,0,.01)"><td style="padding:12px;font-weight:500">Formação Terapeuta Holístico</td><td style="text-align:center;padding:12px;color:var(--teal)">R$97 <span class="src">IBRATH 2025</span></td><td style="text-align:center;padding:12px;font-weight:500">R$597</td><td style="text-align:center;padding:12px;color:var(--coral)">R$1.497</td><td style="text-align:center;padding:12px"><span class="pb ht" style="font-size:10px">Hotmart</span></td></tr>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06)"><td style="padding:12px;font-weight:500">Mesa Radiônica (sessão)</td><td style="text-align:center;padding:12px;color:var(--teal)">R$120</td><td style="text-align:center;padding:12px;font-weight:500">R$250</td><td style="text-align:center;padding:12px;color:var(--coral)">R$500</td><td style="text-align:center;padding:12px;color:var(--muted)">Pres./Online</td></tr>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06);background:rgba(0,0,0,.01)"><td style="padding:12px;font-weight:500">Constelação Familiar</td><td style="text-align:center;padding:12px;color:var(--teal)">R$180</td><td style="text-align:center;padding:12px;font-weight:500">R$350</td><td style="text-align:center;padding:12px;color:var(--coral)">R$800</td><td style="text-align:center;padding:12px;color:var(--muted)">Presencial</td></tr>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06)"><td style="padding:12px;font-weight:500">Florais Vibracionais (curso)</td><td style="text-align:center;padding:12px;color:var(--teal)">R$97</td><td style="text-align:center;padding:12px;font-weight:500">R$197</td><td style="text-align:center;padding:12px;color:var(--coral)">R$497</td><td style="text-align:center;padding:12px"><span class="pb ed" style="font-size:10px">Eduzz</span></td></tr>
+          <tr><td style="padding:12px;font-weight:500">Retiro / Imersão Espiritual</td><td style="text-align:center;padding:12px;color:var(--teal)">R$800</td><td style="text-align:center;padding:12px;font-weight:500">R$2.500</td><td style="text-align:center;padding:12px;color:var(--coral)">R$8.000</td><td style="text-align:center;padding:12px;color:var(--muted)">Presencial</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="fonte" style="margin-top:12px">Access Consciousness BR · Sympla · Hotmart Marketplace · IBRATH 2025 · Guia da Alma · Inst. Bras. Terapias Holísticas (Dez/2025)</p>
+  </div>
+</div>
+
+<!-- ═══════════════ 06 GATILHOS ═══════════════ -->
+<div id="gat" class="sec">
+  <div class="sl">06 — Psicologia de Vendas</div>
+  <h2 class="st">Gatilhos que fazem o cliente comprar</h2>
+  <p class="sd">Gatilhos psicológicos validados por dados das plataformas digitais 2025 e comportamento do consumidor espiritual brasileiro. Fontes: Hotmart Insights, CNDL/SPC, neuromarketing.</p>
+
+  <div class="g3" style="margin-bottom:28px">
+    <div class="met dk" style="text-align:left;padding:28px"><div style="font-size:28px;margin-bottom:12px">🔥</div><div class="mn" style="font-size:20px;margin-bottom:6px">Dor &amp; Urgência</div><div class="mlb" style="font-size:13px;line-height:1.6">51% dos brasileiros compram por impulso online (CNDL/SPC). A dor emocional é o maior acelerador. Converter "sofrimento" em solução urgente é o gatilho #1.</div></div>
+    <div class="met dk" style="text-align:left;padding:28px"><div style="font-size:28px;margin-bottom:12px">🌟</div><div class="mn" style="font-size:20px;margin-bottom:6px">Prova Social</div><div class="mlb" style="font-size:13px;line-height:1.6">Produtos com avaliações têm 270% mais chances de venda. Depoimentos detalhados convertem 4x mais que descrições técnicas. O CEO da Hotmart confirma: "O que conta mais é a identificação com o creator."</div></div>
+    <div class="met dk" style="text-align:left;padding:28px"><div style="font-size:28px;margin-bottom:12px">🔮</div><div class="mn" style="font-size:20px;margin-bottom:6px">Autoridade Espiritual</div><div class="mlb" style="font-size:13px;line-height:1.6">Certificações internacionais, iniciações e número de alunos. Nicho de espiritualidade na Hotmart "exige autoridade, mas o público é altamente engajado e fiel" (NoMarketing Dez/2025).</div></div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px">
+    <div class="g"><div class="gi" style="background:#FAF5E8">🪞</div><div><div class="gtit">Transformação &amp; Identidade</div><div class="gdesc">O cliente compra a versão transformada de si mesmo. "Quero ser a mulher que atraiu o amor", "a empresária que desbloqueou a prosperidade." No digital, o título do curso deve vender a identidade — não a técnica. Isso impacta diretamente a conversão no Hotmart e Kiwify.</div><span class="gp" style="background:var(--gold-pale);color:var(--ink-soft)">Poder: muito alto — amor e prosperidade</span></div></div>
+    <div class="g"><div class="gi" style="background:#F4EEF9">🔗</div><div><div class="gtit">Pertencimento &amp; Comunidade</div><div class="gdesc">Grupos de WhatsApp, Hotmart Club, rituais coletivos online. "Você não está sozinha nessa jornada." Clubes de assinatura com comunidade têm altíssima retenção — Hotmart aponta esse formato como tendência de receita recorrente para 2025/26.</div><span class="gp" style="background:#F4EEF9;color:var(--violet)">Poder: alto — autoconhecimento e amor</span></div></div>
+    <div class="g"><div class="gi" style="background:#EAF5F3">💫</div><div><div class="gtit">Escassez &amp; Urgência Digital</div><div class="gdesc">"Apenas 8 vagas", "turma encerra em 48h." Contador regressivo no checkout Kiwify e Hotmart. Hotmart e Eduzz confirmam que urgência no checkout reduz abandono de carrinho significativamente.</div><span class="gp" style="background:#EAF5F3;color:var(--teal)">Poder: alto — todos os segmentos</span></div></div>
+    <div class="g"><div class="gi" style="background:#FBF0EE">🧲</div><div><div class="gtit">Reciprocidade &amp; Funil de Entrada</div><div class="gdesc">Meditação grátis, e-book de R$7–27, limpeza energética em live. No funil digital, o produto gratuito captura o lead. Order Bump no Hotmart adiciona +30% ao faturamento por venda (dado oficial Hotmart).</div><span class="gp" style="background:#FBF0EE;color:var(--coral)">Poder: alto — conversão de novos clientes</span></div></div>
+    <div class="g"><div class="gi" style="background:#FAF5E8">📖</div><div><div class="gtit">Storytelling de Crise &amp; Superação</div><div class="gdesc">"Eu estava divorciada, endividada e bloqueada. Depois das terapias..." Narrativas autênticas de virada de vida são o principal diferencial de conversão. Hotmart confirma: histórias pessoais na página de vendas aumentam conversão acima da média do nicho.</div><span class="gp" style="background:var(--gold-pale);color:var(--ink-soft)">Poder: muito alto — amor, dinheiro e saúde</span></div></div>
+    <div class="g"><div class="gi" style="background:#F4EEF9">🌙</div><div><div class="gtit">Timing Lunar &amp; Portais Energéticos</div><div class="gdesc">Lançamentos em Lua Nova, Solstícios, virada de ano. Cria urgência natural, alinha com as crenças do público e justifica precificação premium por "janela de oportunidade." Funciona como calendário editorial estratégico de vendas para terapeutas digitais.</div><span class="gp" style="background:#F4EEF9;color:var(--violet)">Poder: médio-alto — segmento espiritual</span></div></div>
+    <div class="g"><div class="gi" style="background:#EAF5F3">📊</div><div><div class="gtit">Ancoragem de Preço &amp; Order Bump</div><div class="gdesc">Mostre o valor avulso antes do pacote. No checkout digital: produto principal + order bump. Hotmart confirma +30% no faturamento. Hotmart Recomenda aumenta ticket médio em 46%. Estratégias validadas com dados reais das plataformas.</div><span class="gp" style="background:#EAF5F3;color:var(--teal)">Poder: alto — todos os segmentos digitais</span></div></div>
+  </div>
+
+  <div class="cw">
+    <div class="ctit">Efetividade dos gatilhos por segmento de consumidor</div>
+    <div class="csub">Score de conversão (0–10) — Amor, Prosperidade e Autoconhecimento</div>
+    <div style="position:relative;height:320px"><canvas id="cGat"></canvas></div>
+  </div>
+</div>
+
+<!-- ═══════════════ 07 TENDÊNCIAS ═══════════════ -->
+<div id="tend" class="sec">
+  <div class="sl">07 — Visão Estratégica 2026</div>
+  <h2 class="st">Tendências e oportunidades</h2>
+  <p class="sd">Grandes forças que moldarão o mercado de terapias energéticas — baseado em Global Wellness Summit 2026, Cielo 2025, Hotmart Creator Economy 2024, Ministério da Saúde e IMARC Group.</p>
+
+  <div class="card" style="margin-bottom:28px">
+    <div class="trend"><div class="tnum">01</div><div><div class="ttit">Infoprodutos de espiritualidade escalam para R$10,6 bilhões</div><div class="tdesc">O mercado de infoprodutos projeta R$10,6 bilhões para 2025 (CAGR 6,5% — CNDL/SPC). Autoconhecimento e espiritualidade são nichos de crescimento acima da média nas plataformas. Novos lançamentos crescem +22%/dia no Hotmart, Eduzz e Kiwify. Espiritualidade é top nicho confirmado na Kiwify (HostGator 2025) e nicho em crescimento acelerado no Hotmart Insights.</div></div></div>
+    <div class="trend"><div class="tnum">02</div><div><div class="ttit">Práticas integrativas crescem 14% no SUS — abrindo mercado privado</div><div class="tdesc">3,8 milhões de pessoas foram atendidas em PICS na atenção primária do SUS de janeiro a agosto de 2025 (+14,2% vs 2024 — Ministério da Saúde). 9 milhões foram atendidas em 2024 total — +83% vs 2022. 340 mil profissionais se capacitaram em cursos online de PICS pelo SUS em 2025. O SUS funciona como canal de conscientização que alimenta a demanda privada digital.</div></div></div>
+    <div class="trend"><div class="tnum">03</div><div><div class="ttit">Modelo de assinatura digital vira padrão para terapeutas</div><div class="tdesc">Clubes de assinatura e membros recorrentes são o formato de maior crescimento para 2025/26 (Hotmart). Para terapeutas: comunidades pagas mensais (R$47–197/mês) com meditações ao vivo, sessões e conteúdo exclusivo geram previsibilidade financeira e altíssima retenção. Hotmart, Eduzz e Kiwify oferecem infraestrutura completa para assinaturas.</div></div></div>
+    <div class="trend"><div class="tnum">04</div><div><div class="ttit">Feminino como protagonista absoluto do bem-estar digital</div><div class="tdesc">Global Wellness Summit 2026 aponta o futuro feminino como tendência central. 78% dos consumidores de terapias energéticas são mulheres. A Creator Economy (Hotmart) confirma: mulheres entre os maiores produtores e consumidores de infoprodutos espirituais no Brasil. Terapias do sagrado feminino e longevidade feminina lideram o crescimento do nicho.</div></div></div>
+    <div class="trend"><div class="tnum">05</div><div><div class="ttit">IA como ferramenta de produção de conteúdo espiritual</div><div class="tdesc">55% dos produtores Hotmart usam Inteligência Artificial para criar conteúdo (Hotmart Creator Economy 2024). Para terapeutas: IA para scripts de meditação, roteiros de curso, e-books e estratégias de tráfego — reduzindo tempo de produção e escalando o negócio digital com menos esforço.</div></div></div>
+    <div class="trend"><div class="tnum">06</div><div><div class="ttit">Brasil é o 1º de LatAm em wellness — projeção de US$222bi até 2034</div><div class="tdesc">O Brasil ocupa a 12ª posição global e a 1ª da América Latina em economia de wellness, com US$96 bilhões movimentados em 2024 (GWI). Projeção IMARC Group: US$91,3 bilhões em 2025, chegando a US$222,4 bilhões até 2034 (CAGR 10,4%). Posicionamento único para terapeutas que querem escalar internacionalmente via Hotmart.</div></div></div>
+  </div>
+
+  <div class="g3">
+    <div class="card" style="border-top:3px solid var(--violet)"><div style="font-size:24px;margin-bottom:12px">💜</div><div class="cl">Segmento amor</div><div style="font-size:16px;font-weight:500;color:var(--ink);margin-bottom:10px">Cura de Relacionamentos</div><div class="cp">Maior urgência de compra. Programas de 21–90 dias de cura do feminino e atração têm altíssima conversão digital — via tráfego pago no Instagram e TikTok. Kiwify ideal para lançar rápido nesse segmento.</div></div>
+    <div class="card" style="border-top:3px solid var(--teal)"><div style="font-size:24px;margin-bottom:12px">💰</div><div class="cl">Segmento prosperidade</div><div style="font-size:16px;font-weight:500;color:var(--ink);margin-bottom:10px">Desbloqueio Financeiro</div><div class="cp">Maior ticket médio. Constelação familiar financeira, Mesa Radiônica de prosperidade e Access Consciousness têm altíssima margem. Hotmart via afiliados é o melhor canal para escalar.</div></div>
+    <div class="card" style="border-top:3px solid var(--gold)"><div style="font-size:24px;margin-bottom:12px">🌱</div><div class="cl">Segmento formação digital</div><div style="font-size:16px;font-weight:500;color:var(--ink);margin-bottom:10px">Escola de Terapeutas Online</div><div class="cp">Maior LTV possível. Cursos online de Access Consciousness, Terapia Quântica e Theta Healing têm custo marginal zero — podem escalar para milhares de alunos com clube de assinatura recorrente.</div></div>
+  </div>
+
+  <div class="ins" style="margin-top:28px">
+    <div class="ins-l">Conclusão estratégica — Dez/2025</div>
+    <p class="ins-t">O Brasil é o 1º mercado de wellness da América Latina. O SUS cresce 14% em práticas integrativas, alimentando consciência e demanda privada. O digital cresce com R$10,6 bilhões em infoprodutos. A maior oportunidade está em combinar experiência transformadora real com distribuição nas plataformas — Hotmart para escala via afiliados, Kiwify para agilidade, Eduzz para taxas menores. O modelo vencedor une sessões + infoproduto + clube de assinatura recorrente.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ 08 ACCESS CONSCIOUSNESS ═══════════════ -->
+<div id="acc" class="sec">
+  <div class="sl">08 — Técnica em Destaque</div>
+  <h2 class="st">Access Consciousness®</h2>
+  <p class="sd">Uma das metodologias de expansão da consciência de maior crescimento global — 176 países, certificação internacional tabelada e modelo único que transforma clientes em facilitadores.</p>
+
+  <div class="g4" style="margin-bottom:28px">
+    <div class="met dk"><span class="mn">176</span><span class="mlb">países com facilitadores</span><span class="ms">certificação internacional</span></div>
+    <div class="met vl"><span class="mn">32</span><span class="mlb">pontos energéticos (Barras)</span><span class="ms">na cabeça</span></div>
+    <div class="met tl"><span class="mn">60–90</span><span class="mlb">minutos por sessão</span><span class="ms">duração padrão</span></div>
+    <div class="met co"><span class="mn">48K</span><span class="mlb">seguidores Instagram BR</span><span class="ms">@accessconsciousnessbr</span></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:28px">
+    <div class="card">
+      <div class="cl">O que é</div>
+      <div class="ct">Access Consciousness®</div>
+      <p class="cp">Sistema de ferramentas pragmáticas criado por Gary Douglas nos anos 1990. A principal técnica são as <strong style="color:var(--ink);font-weight:500">Barras de Access</strong> — toque suave em 32 pontos energéticos na cabeça que libera bloqueios eletromagnéticos armazenados em pensamentos, crenças e padrões de vida.</p><br>
+      <p class="cp">Estudos com EEG registraram estados cerebrais similares à meditação profunda durante as sessões. Usado em empresas, escolas e presídios ao redor do mundo — o que reduz ceticismo e facilita a conversão de novos clientes. No digital, formações são vendidas principalmente no Hotmart.</p><br>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px"><span class="tag v">Expansão da consciência</span><span class="tag t">Liberação de bloqueios</span><span class="tag g">Prosperidade</span><span class="tag c">Saúde e bem-estar</span></div>
+    </div>
+    <div class="card">
+      <div class="cl">Perfil do consumidor</div>
+      <div class="ct">Quem busca Access Consciousness</div>
+      <div class="row"><span class="k">Gênero</span><span class="v">80–85% mulheres</span></div>
+      <div class="row"><span class="k">Faixa etária</span><span class="v">28 a 48 anos</span></div>
+      <div class="row"><span class="k">Renda média</span><span class="v">R$4.000 – R$12.000/mês</span></div>
+      <div class="row"><span class="k">Classe social</span><span class="v">B1 / B2 predominante</span></div>
+      <div class="row"><span class="k">Motivação principal</span><span class="v">Autoconhecimento e prosperidade</span></div>
+      <div class="row"><span class="k">Frequência de sessões</span><span class="v">Quinzenal a mensal</span></div>
+      <div class="row"><span class="k">Ticket mensal médio</span><span class="v">R$300 – R$800</span></div>
+      <div class="row"><span class="k">Plataforma digital</span><span class="v"><span class="pb ht" style="font-size:10px">Hotmart</span> cursos e formações</span></div>
+      <div class="row"><span class="k">Tendência</span><span class="v">Alta — vira facilitador no médio prazo</span></div>
+      <p class="fonte" style="margin-top:12px">Access Consciousness BR · Sympla · facilitadores certificados (Dez/2025)</p>
+    </div>
+  </div>
+
+  <div class="g3" style="margin-bottom:28px">
+    <div class="pt"><div class="ptl">Sessão avulsa</div><div class="pr">R$120–300</div><div class="pf">60–90 min presencial</div><ul class="pl"><li>Liberação de bloqueios</li><li>Expansão de consciência</li><li>Livre precificação</li><li>Online ou presencial</li></ul></div>
+    <div class="pt hi"><div class="ptl">⭐ Curso de Formação</div><div class="pr">R$1.100–1.800</div><div class="pf">1 dia · Certificado Internacional</div><ul class="pl"><li>Tabelado pela Access EUA</li><li>Reconhecido em 176 países</li><li>Inclui 2 sessões práticas</li><li>R$950 na 2ª vez</li></ul></div>
+    <div class="pt"><div class="ptl">Cursos Avançados</div><div class="pr">R$2.500–8.000+</div><div class="pf">O Fundamento, 3 Dias de Corpo</div><ul class="pl"><li>O Fundamento (pré-req. Barras)</li><li>3 Dias de Corpo</li><li>Facilitador Certificado</li><li>Alta recorrência em upgrades</li></ul></div>
+  </div>
+
+  <div class="g2" style="margin-bottom:28px">
+    <div class="cw">
+      <div class="ctit">Áreas de vida beneficiadas (Barras de Access)</div>
+      <div class="csub">Principais resultados relatados por praticantes no Brasil</div>
+      <div style="position:relative;height:280px"><canvas id="cAB"></canvas></div>
+    </div>
+    <div class="cw">
+      <div class="ctit">Jornada de ticket do consumidor Access</div>
+      <div class="csub">Progressão típica de valor ao longo do relacionamento</div>
+      <div style="position:relative;height:280px"><canvas id="cAJ"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:28px">
+    <div class="cl">Posicionamento competitivo</div>
+    <div class="ct">Access Consciousness vs outras terapias energéticas — Dez/2025</div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead><tr style="border-bottom:2px solid var(--border)">
+          <th style="text-align:left;padding:10px 12px;color:var(--muted);font-weight:500">Técnica</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Sessão</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Formação digital</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Público</th>
+          <th style="text-align:center;padding:10px 12px;color:var(--muted);font-weight:500">Diferencial</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06);background:rgba(92,61,122,.04)"><td style="padding:12px;font-weight:500">Access Consciousness</td><td style="text-align:center;padding:12px">R$120–300</td><td style="text-align:center;padding:12px">R$1.100–1.800</td><td style="text-align:center;padding:12px;color:var(--muted)">B1/B2, 28–48 anos</td><td style="text-align:center;padding:12px"><span class="tag v">Prosperidade + expansão</span></td></tr>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06)"><td style="padding:12px;font-weight:500">Terapia Quântica</td><td style="text-align:center;padding:12px">R$150–600</td><td style="text-align:center;padding:12px">R$297–1.497</td><td style="text-align:center;padding:12px;color:var(--muted)">B1/A, 30–50 anos</td><td style="text-align:center;padding:12px"><span class="tag c">Crenças + traumas</span></td></tr>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06);background:rgba(0,0,0,.01)"><td style="padding:12px;font-weight:500">Constelação Familiar</td><td style="text-align:center;padding:12px">R$180–800</td><td style="text-align:center;padding:12px">R$500–3.000</td><td style="text-align:center;padding:12px;color:var(--muted)">B1/A, 35–55 anos</td><td style="text-align:center;padding:12px"><span class="tag g">Padrões familiares</span></td></tr>
+          <tr style="border-bottom:1px solid rgba(0,0,0,.06)"><td style="padding:12px;font-weight:500">Mesa Radiônica</td><td style="text-align:center;padding:12px">R$120–500</td><td style="text-align:center;padding:12px">R$400–2.500</td><td style="text-align:center;padding:12px;color:var(--muted)">B2/B1, 30–50 anos</td><td style="text-align:center;padding:12px"><span class="tag t">Saúde + prosperidade</span></td></tr>
+          <tr><td style="padding:12px;font-weight:500">Florais Vibracionais</td><td style="text-align:center;padding:12px">R$80–350</td><td style="text-align:center;padding:12px">R$97–497</td><td style="text-align:center;padding:12px;color:var(--muted)">C1/B2, amplo</td><td style="text-align:center;padding:12px"><span class="tag g">Equilíbrio emocional</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ins">
+    <div class="ins-l">Posicionamento estratégico — Dez/2025</div>
+    <p class="ins-t">Access Consciousness ocupa um posicionamento único: une linguagem de expansão e possibilidade com resultados em dinheiro e negócios — capturando simultaneamente autoconhecimento e prosperidade. Com tabelamento global, modelo que transforma clientes em facilitadores e foco explícito em resultados financeiros, é o nicho com maior potencial de LTV do segmento energético no Brasil.</p>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+const C={v:'#5C3D7A',t:'#2A7D6F',g:'#C9A84C',c:'#C4533A'};
+const tip={backgroundColor:'#1A1610',titleColor:'#C9A84C',bodyColor:'#fff',padding:12,cornerRadius:8};
+const d={plugins:{legend:{display:false},tooltip:tip},responsive:true,maintainAspectRatio:false};
+
+// 01 Terapias
+new Chart(document.getElementById('cT'),{type:'bar',data:{labels:['Terapia Quântica','Access Consciousness','Constelação Familiar','Meditação','Mesa Radiônica','Florais Vibracionais','Theta Healing','Cristaloterapia'],datasets:[{data:[82,74,68,65,60,55,48,42],backgroundColor:[C.v,'rgba(201,168,76,.9)','rgba(92,61,122,.65)',C.t,'rgba(42,125,111,.75)','rgba(42,125,111,.55)','rgba(196,83,58,.7)','rgba(196,83,58,.45)'],borderRadius:6,borderSkipped:false}]},options:{...d,scales:{y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}});
+
+// 01 Motivos
+new Chart(document.getElementById('cM'),{type:'doughnut',data:{labels:['Amor & Relacionamentos','Prosperidade','Autoconhecimento','Saúde & Ansiedade','Espiritualidade'],datasets:[{data:[32,24,22,14,8],backgroundColor:[C.v,C.t,C.g,C.c,'#9B6CC8'],borderWidth:0,hoverOffset:6}]},options:{...d,plugins:{legend:{display:true,position:'bottom',labels:{font:{size:11},padding:12,boxWidth:12,boxHeight:12}},tooltip:tip},cutout:'62%'}});
+
+// 02 Taxas
+new Chart(document.getElementById('cTx'),{type:'bar',data:{labels:['Hotmart','Eduzz','Kiwify'],datasets:[{data:[9.9,4.9,8.99],backgroundColor:['#FF6000','#3B5FDB','#00B47D'],borderRadius:10,borderSkipped:false}]},options:{...d,scales:{y:{beginAtZero:true,max:12,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:13}},grid:{display:false}}}}});
+
+// 02 Radar plataformas
+new Chart(document.getElementById('cPr'),{type:'radar',data:{labels:['Escala afiliados','Taxas baixas','Saque rápido','Facilidade','Suporte','Mkt avançado'],datasets:[{label:'Hotmart',data:[10,4,5,7,7,10],borderColor:'#FF6000',backgroundColor:'rgba(255,96,0,.1)',pointBackgroundColor:'#FF6000',borderWidth:2,pointRadius:4},{label:'Eduzz',data:[7,10,6,8,9,7],borderColor:'#3B5FDB',backgroundColor:'rgba(59,95,219,.1)',pointBackgroundColor:'#3B5FDB',borderWidth:2,pointRadius:4},{label:'Kiwify',data:[5,8,10,10,9,6],borderColor:'#00B47D',backgroundColor:'rgba(0,180,125,.1)',pointBackgroundColor:'#00B47D',borderWidth:2,pointRadius:4}]},options:{...d,plugins:{legend:{display:true,position:'bottom',labels:{font:{size:11},padding:14,boxWidth:12,boxHeight:12}},tooltip:tip},scales:{r:{beginAtZero:true,max:10,ticks:{stepSize:2,font:{size:10}},pointLabels:{font:{size:11}},grid:{color:'rgba(0,0,0,.08)'}}}}});
+
+// 03 Gênero
+new Chart(document.getElementById('cG'),{type:'doughnut',data:{labels:['Mulheres','Homens'],datasets:[{data:[78,22],backgroundColor:[C.v,'rgba(92,61,122,.25)'],borderWidth:0}]},options:{...d,plugins:{legend:{display:true,position:'bottom',labels:{font:{size:12},padding:16,boxWidth:12,boxHeight:12}},tooltip:tip},cutout:'68%'}});
+
+// 03 Idade
+new Chart(document.getElementById('cI'),{type:'bar',data:{labels:['18–24','25–34','35–44','45–54','55+'],datasets:[{data:[9,32,34,18,7],backgroundColor:['rgba(201,168,76,.4)',C.v,C.t,C.g,C.c],borderRadius:8,borderSkipped:false}]},options:{...d,scales:{y:{beginAtZero:true,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:12}},grid:{display:false}}}}});
+
+// 04 Renda
+new Chart(document.getElementById('cR'),{type:'bar',data:{labels:['Até R$2.500','R$2.500–5k','R$5k–10k','R$10k–20k','Acima R$20k'],datasets:[{data:[12,28,52,68,79],backgroundColor:['rgba(201,168,76,.3)','rgba(201,168,76,.45)','rgba(92,61,122,.6)','rgba(92,61,122,.8)',C.v],borderRadius:8,borderSkipped:false}]},options:{...d,scales:{y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}});
+
+// 05 Frequência
+new Chart(document.getElementById('cFq'),{type:'bar',data:{labels:['Sofia\nAmor','Renata\nProsp.','Laura\nAutoconh.','Maria\nSaúde'],datasets:[{data:[1.5,3,2,3],backgroundColor:[C.v,C.t,C.g,C.c],borderRadius:10,borderSkipped:false}]},options:{...d,scales:{y:{beginAtZero:true,max:5,ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}});
+
+// 05 Ticket
+new Chart(document.getElementById('cTk'),{type:'bar',data:{labels:['Sofia\nAmor','Renata\nProsp.','Laura\nAutoconh.','Maria\nSaúde'],datasets:[{label:'Ticket médio/mês',data:[450,900,475,350],backgroundColor:[C.v,C.t,C.g,C.c],borderRadius:[8,8,8,8],borderSkipped:false},{label:'Ticket alto (pacotes)',data:[1700,5250,3250,1200],backgroundColor:['rgba(92,61,122,.2)','rgba(42,125,111,.2)','rgba(201,168,76,.2)','rgba(196,83,58,.2)'],borderRadius:[8,8,8,8],borderSkipped:false}]},options:{...d,plugins:{legend:{display:true,position:'bottom',labels:{font:{size:11},padding:12,boxWidth:12,boxHeight:12}},tooltip:tip},scales:{y:{beginAtZero:true,ticks:{callback:v=>'R$'+v.toLocaleString('pt-BR'),font:{size:10}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}});
+
+// 06 Gatilhos radar
+new Chart(document.getElementById('cGat'),{type:'radar',data:{labels:['Dor & Urgência','Prova Social','Autoridade','Transformação','Pertencimento','Escassez','Reciprocidade','Storytelling'],datasets:[{label:'Amor & Relacionamentos',data:[9.5,8.5,7,9,8.5,7,8,9.5],borderColor:C.v,backgroundColor:'rgba(92,61,122,.12)',pointBackgroundColor:C.v,borderWidth:2,pointRadius:4},{label:'Prosperidade & Dinheiro',data:[7,9,9,8.5,7.5,8.5,7.5,8],borderColor:C.t,backgroundColor:'rgba(42,125,111,.1)',pointBackgroundColor:C.t,borderWidth:2,pointRadius:4},{label:'Autoconhecimento',data:[5,7.5,8,9,9,6,9,8.5],borderColor:C.g,backgroundColor:'rgba(201,168,76,.1)',pointBackgroundColor:C.g,borderWidth:2,pointRadius:4}]},options:{...d,plugins:{legend:{display:true,position:'bottom',labels:{font:{size:11},padding:16,boxWidth:12,boxHeight:12}},tooltip:tip},scales:{r:{beginAtZero:true,max:10,ticks:{font:{size:10},stepSize:2},pointLabels:{font:{size:11}},grid:{color:'rgba(0,0,0,.08)'}}}}});
+
+// 08 Access Benefícios
+new Chart(document.getElementById('cAB'),{type:'bar',data:{labels:['Ansiedade & Estresse','Qualidade do Sono','Clareza Mental','Prosperidade','Relacionamentos','Criatividade','Dores Crônicas','Autoestima'],datasets:[{data:[88,82,79,71,68,65,58,74],backgroundColor:[C.v,'rgba(92,61,122,.75)','rgba(92,61,122,.6)','rgba(201,168,76,.9)',C.t,'rgba(42,125,111,.7)','rgba(196,83,58,.7)','rgba(92,61,122,.5)'],borderRadius:6,borderSkipped:false}]},options:{...d,indexAxis:'y',scales:{x:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%',font:{size:10}},grid:{color:'rgba(0,0,0,.05)'}},y:{ticks:{font:{size:11}},grid:{display:false}}}}});
+
+// 08 Access Jornada
+new Chart(document.getElementById('cAJ'),{type:'line',data:{labels:['1ª sessão','1º curso','2ª vez curso','O Fundamento','Proc. Corporais','Facilitador'],datasets:[{label:'Ticket acumulado',data:[180,1800,950,3500,5500,12000],borderColor:C.v,backgroundColor:'rgba(92,61,122,.08)',pointBackgroundColor:C.v,pointRadius:6,tension:.4,fill:true,borderWidth:2.5}]},options:{...d,plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:ctx=>'R$'+ctx.raw.toLocaleString('pt-BR')}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'R$'+v.toLocaleString('pt-BR'),font:{size:10}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}});
+</script>
+</body>
+</html>
